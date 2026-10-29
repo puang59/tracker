@@ -190,7 +190,7 @@ function BladeCard({
 function progressFor(data: Data, k: string): [number, number] {
   const d = data.days[k] ?? {};
   const aza = azaStatus(data, k);
-  const flags = [d.mv, d.cr, d.om, d.mg, d.gel, ...(aza.due || aza.done ? [aza.done] : []), d.a1, d.a2, d.a3, d.p1, d.p3];
+  const flags = [d.mv, d.cr, d.om, d.sh, d.pg1, d.pg2, d.pg3, d.pg4, d.mg, d.gel, ...(aza.due || aza.done ? [aza.done] : []), d.a1, d.a2, d.a3, d.p1, d.p3];
   return [flags.filter(Boolean).length, flags.length];
 }
 
@@ -285,7 +285,7 @@ export default function Page() {
   const flags =
     tab === "skincare"
       ? [day.a1, day.a2, day.a3, day.p1, !!day.gel, day.p3]
-      : [day.mv, day.cr, day.om, day.mg, !!day.gel, ...(azaCounts ? [aza.done] : [])];
+      : [day.mv, day.cr, day.om, day.sh, day.pg1, day.pg2, day.pg3, day.pg4, day.mg, !!day.gel, ...(azaCounts ? [aza.done] : [])];
   const total = flags.length;
   const doneCount = flags.filter(Boolean).length;
   const allDone = doneCount === total;
@@ -363,12 +363,19 @@ export default function Page() {
       ) : (
       <>
       <Section emoji="2600" title="Morning">
-        <Row emoji="hk-orange.svg" title="Multivitamin" done={!!day.mv} onToggle={() => toggleSimple(date, "mv")} />
-        <Row emoji="1f4aa" title="Creatine" done={!!day.cr} onToggle={() => toggleSimple(date, "cr")} />
+        <Row emoji="hk-orange.svg" title="Multivitamin" sub="After breakfast" done={!!day.mv} onToggle={() => toggleSimple(date, "mv")} />
+        <Row emoji="1f4aa" title="Creatine" sub="After breakfast" done={!!day.cr} onToggle={() => toggleSimple(date, "cr")} />
+        <Row emoji="osmega-green.svg" title="Osmega-500" sub="After breakfast" done={!!day.om} onToggle={() => toggleSimple(date, "om")} />
+        <Row emoji="eye-cyan.svg" title="Sodium hyaluronate eye drop" done={!!day.sh} onToggle={() => toggleSimple(date, "sh")} />
+        <Row emoji="eye-pink.svg" title="Polyethylene glycol 400 eye drop" done={!!day.pg1} onToggle={() => toggleSimple(date, "pg1")} />
       </Section>
 
-      <Section emoji="1f37d" title="After lunch">
-        <Row emoji="1f41f" title="Omega 3" done={!!day.om} onToggle={() => toggleSimple(date, "om")} />
+      <Section emoji="1f37d" title="Afternoon">
+        <Row emoji="eye-pink.svg" title="Polyethylene glycol 400 eye drop" done={!!day.pg2} onToggle={() => toggleSimple(date, "pg2")} />
+      </Section>
+
+      <Section emoji="1f319" title="Evening">
+        <Row emoji="eye-pink.svg" title="Polyethylene glycol 400 eye drop" done={!!day.pg3} onToggle={() => toggleSimple(date, "pg3")} />
       </Section>
 
       <Section emoji="1f319" title="Night">
@@ -379,6 +386,7 @@ export default function Page() {
           done={!!day.mg}
           onToggle={() => toggleSimple(date, "mg")}
         />
+        <Row emoji="eye-pink.svg" title="Polyethylene glycol 400 eye drop" done={!!day.pg4} onToggle={() => toggleSimple(date, "pg4")} />
         <Row
           emoji={GEL_INFO[gel.tonight].emoji}
           title={GEL_INFO[gel.tonight].name}

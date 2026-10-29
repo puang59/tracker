@@ -8,6 +8,12 @@ export type Day = {
   om?: true;
   mg?: true;
   aza?: true;
+  // eye drops: sodium hyaluronate (morning) and PEG 400 (morning/afternoon/evening/night)
+  sh?: true;
+  pg1?: true;
+  pg2?: true;
+  pg3?: true;
+  pg4?: true;
   gel?: Gel;
   // skincare routine steps (night step 2 is the gel above)
   a1?: true;
@@ -119,7 +125,7 @@ function patchDay(date: string, fn: (d: Day) => Day) {
   commit({ ...data, days: { ...data.days, [date]: day } });
 }
 
-export function toggleSimple(date: string, k: "mv" | "cr" | "om" | "mg" | "aza") {
+export function toggleSimple(date: string, k: "mv" | "cr" | "om" | "mg" | "aza" | "sh" | "pg1" | "pg2" | "pg3" | "pg4") {
   patchDay(date, (d) => {
     if (d[k]) delete d[k];
     else d[k] = true;

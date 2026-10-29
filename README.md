@@ -8,7 +8,7 @@ If you like the design sense and UI/UX, feel free to clone it and make one for y
 
 ## What it does
 
-- **Checklist:** morning, after lunch and night supplements.
+- **Checklist:** morning, afternoon, evening and night supplements and eye drops.
 - **Skincare:** morning and night routines in strict order.
 - **Gels:** Nioclean and Sebozit alternate daily.
 - **Azelaic acid:** shows up every 2 days.
