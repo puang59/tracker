@@ -11,7 +11,7 @@ If you like the design sense and UI/UX, feel free to clone it and make one for y
 - **Checklist:** morning, afternoon, evening and night supplements and eye drops.
 - **Skincare:** morning and night routines in strict order.
 - **Gels:** Nioclean and Sebozit alternate daily.
-- **Azelaic acid:** shows up every 2 days.
+- **Azelaic acid:** shows up every 3rd day (two days off in between).
 - **Blade:** counts shaves out of 20.
 - **History:** tap a past day to edit it.
 

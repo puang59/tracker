@@ -69,7 +69,7 @@ const fresh = (): Data => {
 };
 
 // One-time seed for existing saves: azelaic acid was last applied yesterday,
-// so the next dose is tomorrow night. Skipped once any dose has been logged.
+// so the next dose is in 2 days. Skipped once any dose has been logged.
 function seedAza(data: Data): Data {
   if (Object.values(data.days).some((d) => d.aza)) return data;
   const y = addDays(dateKey(), -1);
@@ -217,11 +217,14 @@ export function gelStatus(data: Data, today: string) {
   return { done, tonight, last };
 }
 
+// two off days between doses (e.g. Wed -> Sat)
+const AZA_INTERVAL = 3;
+
 export function azaStatus(data: Data, today: string) {
   const done = !!data.days[today]?.aza;
   const lastKey = lastWith(data, today, (d) => !!d.aza, true);
   if (!lastKey) return { done, due: true, overdue: false, last: null, next: today };
   const gap = daysBetween(lastKey, today);
-  const next = addDays(lastKey, 2);
-  return { done, due: !done && gap >= 2, overdue: !done && gap >= 3, last: lastKey, next };
+  const next = addDays(lastKey, AZA_INTERVAL);
+  return { done, due: !done && gap >= AZA_INTERVAL, overdue: !done && gap > AZA_INTERVAL, last: lastKey, next };
 }
