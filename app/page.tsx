@@ -9,6 +9,7 @@ import {
   gelStatus,
   newBlade,
   resetAll,
+  toggleAza,
   toggleShave,
   ROUTINE_KEYS,
   stepDone,
@@ -366,28 +367,35 @@ export default function Page() {
             ))}
           </Section>
           <Section emoji="1f319" title="Night routine">
-            {[CLEANSER, { title: GEL_INFO[gel.tonight].name, emoji: GEL_INFO[gel.tonight].emoji }, MOISTURIZER].map(
-              (st, i) => (
-                <Row
-                  key={i}
-                  emoji={st.emoji}
-                  title={st.title}
-                  sub={`Step ${i + 1}`}
-                  done={stepDone(day, ROUTINE_KEYS.pm[i])}
-                  locked={i > 0 && !stepDone(day, ROUTINE_KEYS.pm[i - 1]) && !stepDone(day, ROUTINE_KEYS.pm[i])}
-                  onToggle={() => toggleStep(date, "pm", i, gel.tonight)}
-                />
-              ),
+            {[CLEANSER, { title: GEL_INFO[gel.tonight].name, emoji: GEL_INFO[gel.tonight].emoji }].map((st, i) => (
+              <Row
+                key={i}
+                emoji={st.emoji}
+                title={st.title}
+                sub={`Step ${i + 1}`}
+                done={stepDone(day, ROUTINE_KEYS.pm[i])}
+                locked={i > 0 && !stepDone(day, ROUTINE_KEYS.pm[i - 1]) && !stepDone(day, ROUTINE_KEYS.pm[i])}
+                onToggle={() => toggleStep(date, "pm", i, gel.tonight)}
+              />
+            ))}
+            {azaCounts && (
+              <Row
+                emoji="ordinary.png"
+                title="Azelaic Acid 10%"
+                sub={azaSub}
+                done={aza.done}
+                locked={!day.gel && !aza.done}
+                onToggle={() => toggleAza(date)}
+              />
             )}
-        {azaCounts && (
-          <Row
-            emoji="ordinary.png"
-            title="Azelaic Acid 10%"
-            sub={azaSub}
-            done={aza.done}
-            onToggle={() => toggleSimple(date, "aza")}
-          />
-        )}
+            <Row
+              emoji={MOISTURIZER.emoji}
+              title={MOISTURIZER.title}
+              sub={`Step ${azaCounts ? 4 : 3}`}
+              done={!!day.p3}
+              locked={!day.p3 && (!day.gel || (azaCounts && !aza.done))}
+              onToggle={() => toggleStep(date, "pm", 2, gel.tonight)}
+            />
           </Section>
         </>
       ) : (

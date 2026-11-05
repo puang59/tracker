@@ -149,10 +149,23 @@ export function toggleStep(date: string, routine: Routine, i: number, gel: Gel) 
     if (stepDone(d, keys[i])) {
       // unticking a step also clears everything after it
       for (const k of keys.slice(i)) delete d[k];
+      if (keys[i] === "gel") delete d.aza;
     } else if (i === 0 || stepDone(d, keys[i - 1])) {
       if (keys[i] === "gel") d.gel = gel;
       else d[keys[i] as "a1" | "a2" | "a3" | "p1" | "p3"] = true;
     }
+    return d;
+  });
+}
+
+// Azelaic acid sits between the gel and the moisturizer: it needs the gel first,
+// and unticking it also clears the moisturizer.
+export function toggleAza(date: string) {
+  patchDay(date, (d) => {
+    if (d.aza) {
+      delete d.aza;
+      delete d.p3;
+    } else if (d.gel) d.aza = true;
     return d;
   });
 }
