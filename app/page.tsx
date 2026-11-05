@@ -8,6 +8,7 @@ import {
   dateKey,
   gelStatus,
   newBlade,
+  resetAll,
   toggleGel,
   toggleShave,
   ROUTINE_KEYS,
@@ -239,6 +240,27 @@ function DayStrip({
   );
 }
 
+function ResetButton() {
+  const [confirm, setConfirm] = useState(false);
+  useEffect(() => {
+    if (!confirm) return;
+    const t = setTimeout(() => setConfirm(false), 3000);
+    return () => clearTimeout(t);
+  }, [confirm]);
+  return (
+    <button
+      className="reset"
+      onClick={() => {
+        if (!confirm) return setConfirm(true);
+        resetAll();
+        setConfirm(false);
+      }}
+    >
+      {confirm ? "Tap again to reset (blade kept)" : "Reset all data"}
+    </button>
+  );
+}
+
 type Tab = "checklist" | "skincare";
 
 function Tabs({ tab, onChange }: { tab: Tab; onChange: (t: Tab) => void }) {
@@ -363,7 +385,6 @@ export default function Page() {
       ) : (
       <>
       <Section emoji="2600" title="Morning">
-        <Row emoji="hk-orange.svg" title="Multivitamin" sub="After breakfast" done={!!day.mv} onToggle={() => toggleSimple(date, "mv")} />
         <Row emoji="1f4aa" title="Creatine" sub="After breakfast" done={!!day.cr} onToggle={() => toggleSimple(date, "cr")} />
         <Row emoji="osmega-green.svg" title="Osmega-500" sub="After breakfast" done={!!day.om} onToggle={() => toggleSimple(date, "om")} />
         <Row emoji="eye-cyan.svg" title="Sodium hyaluronate eye drop" done={!!day.sh} onToggle={() => toggleSimple(date, "sh")} />
@@ -371,6 +392,7 @@ export default function Page() {
       </Section>
 
       <Section emoji="1f37d" title="Afternoon">
+        <Row emoji="hk-orange.svg" title="Multivitamin" sub="After lunch" done={!!day.mv} onToggle={() => toggleSimple(date, "mv")} />
         <Row emoji="eye-pink.svg" title="Polyethylene glycol 400 eye drop" done={!!day.pg2} onToggle={() => toggleSimple(date, "pg2")} />
       </Section>
 
@@ -408,6 +430,8 @@ export default function Page() {
       <BladeCard date={date} isToday={isToday} shaves={data.blade.shaves} startedAt={data.blade.startedAt} />
       </>
       )}
+
+      <ResetButton />
     </main>
   );
 }

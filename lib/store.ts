@@ -58,7 +58,9 @@ const fresh = (): Data => {
     v: 1,
     days: {
       // yesterday was Sebozit, so tonight starts on Nioclean
-      [addDays(today, -1)]: { gel: "sebozit", aza: true },
+      [addDays(today, -1)]: { gel: "sebozit" },
+      // azelaic acid was applied 2 days ago, so the next dose is tomorrow night
+      [addDays(today, -2)]: { aza: true },
     },
     blade: {
       startedAt: addDays(today, -4),
@@ -68,11 +70,11 @@ const fresh = (): Data => {
   };
 };
 
-// One-time seed for existing saves: azelaic acid was last applied yesterday,
-// so the next dose is in 2 days. Skipped once any dose has been logged.
+// One-time seed for existing saves: azelaic acid was last applied 2 days ago,
+// so the next dose is tomorrow. Skipped once any dose has been logged.
 function seedAza(data: Data): Data {
   if (Object.values(data.days).some((d) => d.aza)) return data;
-  const y = addDays(dateKey(), -1);
+  const y = addDays(dateKey(), -2);
   return { ...data, days: { ...data.days, [y]: { ...data.days[y], aza: true } } };
 }
 
@@ -179,6 +181,12 @@ export function newBlade(date: string) {
       ],
     },
   });
+}
+
+// Wipes all daily logs back to the starting seed; the blade tracking is kept.
+export function resetAll() {
+  const data = getSnapshot();
+  commit({ ...fresh(), blade: data.blade });
 }
 
 /* ---------- derived ---------- */
