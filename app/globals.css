@@ -530,3 +530,15 @@ h1 {
   border: 0;
   cursor: pointer;
 }
+
+.swap {
+  display: block;
+  margin: 4px auto 0;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-2);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}

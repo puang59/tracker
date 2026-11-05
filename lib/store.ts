@@ -15,6 +15,8 @@ export type Day = {
   pg3?: true;
   pg4?: true;
   gel?: Gel;
+  // manual override of the suggested gel, used until the gel is ticked
+  gp?: Gel;
   // skincare routine steps (night step 2 is the gel above)
   a1?: true;
   a2?: true;
@@ -130,6 +132,13 @@ export function toggleGel(date: string, gel: Gel) {
   });
 }
 
+export function pickGel(date: string, gel: Gel) {
+  patchDay(date, (d) => {
+    d.gp = gel;
+    return d;
+  });
+}
+
 export function toggleStep(date: string, routine: Routine, i: number, gel: Gel) {
   const keys = ROUTINE_KEYS[routine];
   patchDay(date, (d) => {
@@ -221,7 +230,7 @@ export function gelStatus(data: Data, today: string) {
   const lastKey = lastWith(data, today, (d) => !!d.gel, false);
   const last = lastKey ? data.days[lastKey].gel! : null;
   const auto: Gel = last === "nioclean" ? "sebozit" : "nioclean";
-  const tonight: Gel = done ?? auto;
+  const tonight: Gel = done ?? data.days[today]?.gp ?? auto;
   return { done, tonight, last };
 }
 

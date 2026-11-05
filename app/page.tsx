@@ -8,6 +8,7 @@ import {
   dateKey,
   gelStatus,
   newBlade,
+  pickGel,
   resetAll,
   toggleAza,
   toggleShave,
@@ -378,6 +379,14 @@ export default function Page() {
                 onToggle={() => toggleStep(date, "pm", i, gel.tonight)}
               />
             ))}
+            {!day.gel && (
+              <button
+                className="swap"
+                onClick={() => pickGel(date, gel.tonight === "nioclean" ? "sebozit" : "nioclean")}
+              >
+                Used {GEL_INFO[gel.tonight === "nioclean" ? "sebozit" : "nioclean"].name.replace(" Gel", "")} instead? Switch
+              </button>
+            )}
             <Row
               emoji="ordinary.png"
               title="Azelaic Acid 10%"
