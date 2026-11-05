@@ -51,17 +51,12 @@ export const dateKey = (d = new Date()) => {
   return `${d.getFullYear()}-${m}-${day}`;
 };
 
-// Initial seed: tonight is Nioclean, and the current blade already has 2 shaves.
+// Initial state: no logs, and the current blade already has 2 shaves.
 const fresh = (): Data => {
   const today = dateKey();
   return {
     v: 1,
-    days: {
-      // yesterday was Sebozit, so tonight starts on Nioclean
-      [addDays(today, -1)]: { gel: "sebozit" },
-      // azelaic acid was applied 2 days ago, so the next dose is tomorrow night
-      [addDays(today, -2)]: { aza: true },
-    },
+    days: {},
     blade: {
       startedAt: addDays(today, -4),
       shaves: [addDays(today, -4), addDays(today, -2)],
@@ -70,21 +65,13 @@ const fresh = (): Data => {
   };
 };
 
-// One-time seed for existing saves: azelaic acid was last applied 2 days ago,
-// so the next dose is tomorrow. Skipped once any dose has been logged.
-function seedAza(data: Data): Data {
-  if (Object.values(data.days).some((d) => d.aza)) return data;
-  const y = addDays(dateKey(), -2);
-  return { ...data, days: { ...data.days, [y]: { ...data.days[y], aza: true } } };
-}
-
 let cache: Data | null = null;
 const listeners = new Set<() => void>();
 
 function load(): Data {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return seedAza(JSON.parse(raw) as Data);
+    if (raw) return JSON.parse(raw) as Data;
   } catch {}
   return fresh();
 }
@@ -196,10 +183,10 @@ export function newBlade(date: string) {
   });
 }
 
-// Wipes all daily logs back to the starting seed; the blade tracking is kept.
+// Wipes every daily log (all days, gel and azelaic history); the blade tracking is kept.
 export function resetAll() {
   const data = getSnapshot();
-  commit({ ...fresh(), blade: data.blade });
+  commit({ v: 1, days: {}, blade: data.blade });
 }
 
 /* ---------- derived ---------- */

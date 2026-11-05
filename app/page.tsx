@@ -324,7 +324,7 @@ export default function Page() {
         ? aza.last
           ? `Due tonight · last ${weekday(aza.last)}`
           : "Due tonight"
-        : "";
+        : `Not due · next ${weekday(aza.next)}`;
 
   return (
     <main className="wrap">
@@ -378,16 +378,15 @@ export default function Page() {
                 onToggle={() => toggleStep(date, "pm", i, gel.tonight)}
               />
             ))}
-            {azaCounts && (
-              <Row
-                emoji="ordinary.png"
-                title="Azelaic Acid 10%"
-                sub={azaSub}
-                done={aza.done}
-                locked={!day.gel && !aza.done}
-                onToggle={() => toggleAza(date)}
-              />
-            )}
+            <Row
+              emoji="ordinary.png"
+              title="Azelaic Acid 10%"
+              sub={azaSub}
+              done={aza.done}
+              dim={!azaCounts}
+              locked={!day.gel && !aza.done}
+              onToggle={() => toggleAza(date)}
+            />
             <Row
               emoji={MOISTURIZER.emoji}
               title={MOISTURIZER.title}
