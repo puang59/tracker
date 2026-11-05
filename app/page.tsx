@@ -9,7 +9,6 @@ import {
   gelStatus,
   newBlade,
   resetAll,
-  toggleGel,
   toggleShave,
   ROUTINE_KEYS,
   stepDone,
@@ -303,11 +302,11 @@ export default function Page() {
   const aza = azaStatus(data, date);
   const azaCounts = aza.due || aza.done;
 
-  // each tab has its own progress; the gel counts in both since it's shared
+  // each tab has its own progress
   const flags =
     tab === "skincare"
-      ? [day.a1, day.a2, day.a3, day.p1, !!day.gel, day.p3]
-      : [day.mv, day.cr, day.om, day.sh, day.pg1, day.pg2, day.pg3, day.pg4, day.mg, !!day.gel, ...(azaCounts ? [aza.done] : [])];
+      ? [day.a1, day.a2, day.a3, day.p1, !!day.gel, day.p3, ...(azaCounts ? [aza.done] : [])]
+      : [day.mv, day.cr, day.om, day.sh, day.pg1, day.pg2, day.pg3, day.pg4, day.mg];
   const total = flags.length;
   const doneCount = flags.filter(Boolean).length;
   const allDone = doneCount === total;
@@ -380,6 +379,15 @@ export default function Page() {
                 />
               ),
             )}
+        {azaCounts && (
+          <Row
+            emoji="ordinary.png"
+            title="Azelaic Acid 10%"
+            sub={azaSub}
+            done={aza.done}
+            onToggle={() => toggleSimple(date, "aza")}
+          />
+        )}
           </Section>
         </>
       ) : (
@@ -409,22 +417,6 @@ export default function Page() {
           onToggle={() => toggleSimple(date, "mg")}
         />
         <Row emoji="eye-pink.svg" title="Polyethylene glycol 400 eye drop" done={!!day.pg4} onToggle={() => toggleSimple(date, "pg4")} />
-        <Row
-          emoji={GEL_INFO[gel.tonight].emoji}
-          title={GEL_INFO[gel.tonight].name}
-          sub={gel.done ? "Applied" : "Tonight's gel"}
-          done={!!gel.done}
-          onToggle={() => toggleGel(date, gel.tonight)}
-        />
-        {azaCounts && (
-          <Row
-            emoji="ordinary.png"
-            title="Azelaic Acid 10%"
-            sub={azaSub}
-            done={aza.done}
-            onToggle={() => toggleSimple(date, "aza")}
-          />
-        )}
       </Section>
 
       <BladeCard date={date} isToday={isToday} shaves={data.blade.shaves} startedAt={data.blade.startedAt} />
